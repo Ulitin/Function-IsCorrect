@@ -6,26 +6,24 @@ struct Str
 	Str* next;
 };
 
-void FandLastEnd(Str* first_el, Str** element, int* i)
+void DeleteElement(Str* first_el, Str** element)
 {
-	if(*i==1)
+	if(first_el!=0)
 	{
-		*i=0;
-		(*element)->letter=' ';
-	}
-	else
-	{
-		(*element)->letter=(*first_el).letter;
-		(*element)->next=(*first_el).next;
-		for(int q=0; q<(*i-2); q++)
+		if(first_el->next!=0)
 		{
-			(*element)=(*element)->next;
+			while(first_el->next!=0)
+			{
+				(*element)=first_el;
+				first_el=first_el->next;
+			}
+			(*element)->next=0;
+			delete first_el;
 		}
-		if(*i<2)
+		else
 		{
-			delete ((*element)->next);
+			(*element)->letter=' ';
 		}
-		(*i)=(*i)-1;
 	}
 }
 
@@ -40,6 +38,7 @@ bool isCorrect(char* string)
 	int i=0;
 	first_el=element;
 	element->letter=' ';
+	element->next=0;
 	for(int j=0; string[j]!=0; j++)
 	{		
 		while((string[j]=='(')||(string[j]=='{')||(string[j]=='['))
@@ -49,6 +48,7 @@ bool isCorrect(char* string)
 				element->next= new Str;
 				element=element->next;	
 				element->letter=string[j];
+				element->next=0;
 			}
 			else
 			{
@@ -72,7 +72,8 @@ bool isCorrect(char* string)
 		}
 		if(element->letter==simvol)
 		{
-			FandLastEnd(first_el,&element,&i);
+			DeleteElement(first_el,&element);
+			i--;
 		}
 		else
 		{
